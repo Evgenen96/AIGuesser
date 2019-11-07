@@ -36,14 +36,6 @@ public class TNode {
         question = q;
     }
 
-//    public TNode(FileWriter fw, FileReader fr) {
-//        parentNode = null;
-//        nodes = new ArrayList();
-//        question = "Загадайте животное";
-//        writer = fw;
-//        reader = fr;
-//    }
-
     public void addNode() {
         nodes.add(new TNode(this));
     }
@@ -67,14 +59,17 @@ public class TNode {
     public TNode load() throws IOException {
         BufferedReader bReader = new BufferedReader(reader);
         String line;
+        int level = 0;
         TNode currentNode = new TNode();
         TNode topNode = currentNode;
         while ((line = bReader.readLine()) != null) {
             if (!line.equals("")) {
                 currentNode.addNode(line);
+ //               System.out.println(++level + " " + line);
                 currentNode = currentNode.nodes.get(currentNode.nodes.size() - 1);
             } else if (currentNode.parentNode != null) {
                 currentNode = currentNode.parentNode;
+                --level;
             }
         }
         return topNode;

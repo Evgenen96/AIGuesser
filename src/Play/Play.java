@@ -19,12 +19,16 @@ public class Play {
         currentNode = currentNode.getAnswer(true);
         while (true) {
             if (currentNode.isLastQuestion()) {
-                System.out.println("посл вопрос");
-                System.out.println(currentNode.question);
+                System.out.println("Это " + currentNode.question + "?");
                 answer = sc.nextInt();
                 if (answer == 1) {
                     System.out.println("Ура, я угадал");
                 } else {
+                    currentNode.asked = true;
+                    if (!currentNode.parentNode.nodesQuestionAllAsked()) {
+                        System.out.println("еще!");
+                        continue;
+                    }
                     System.out.println("Кто это тогда?");
                     String animal = sc.nextLine();
                     animal = sc.nextLine();
@@ -32,7 +36,7 @@ public class Play {
                     String animalDescription = sc.nextLine();
                     currentNode.parentNode.addNode(animalDescription);
                     currentNode.parentNode.nodes.get(currentNode.parentNode.nodes.size() - 1).addNode(animal);
-                    TNode.writer  = new FileWriter("tree2.txt", false);
+                    TNode.writer = new FileWriter("tree2.txt", false);
                     top.save(top);
                     TNode.writer.close();
                 }
@@ -46,8 +50,8 @@ public class Play {
                 System.out.println("Как вы бы описали его");
                 String animalDescription = sc.nextLine();
                 currentNode.addNode(animalDescription);
-                currentNode.nodes.get(currentNode.parentNode.nodes.size() - 1).addNode(animal);
-                TNode.writer  = new FileWriter("tree2.txt", false);
+                currentNode.nodes.get(currentNode.nodes.size() - 1).addNode(animal);
+                TNode.writer = new FileWriter("tree2.txt", false);
                 top.save(top);
                 TNode.writer.close();
                 break;
