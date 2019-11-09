@@ -26,7 +26,8 @@ public class Play {
                 } else {
                     currentNode.asked = true;
                     if (!currentNode.parentNode.nodesQuestionAllAsked()) {
-                        System.out.println("еще!");
+                        currentNode = currentNode.parentNode;
+                        currentNode = currentNode.getAnswer(true);
                         continue;
                     }
                     System.out.println("Кто это тогда?");

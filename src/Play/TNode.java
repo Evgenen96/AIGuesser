@@ -65,7 +65,13 @@ public class TNode {
         while ((line = bReader.readLine()) != null) {
             if (!line.equals("")) {
                 currentNode.addNode(line);
- //               System.out.println(++level + " " + line);
+                for (int i = 0; i < level; i++) {
+                    System.out.print("  ");
+                  
+                }
+                  System.out.print(level + "" + line);
+                  System.out.println("");
+                  level++;
                 currentNode = currentNode.nodes.get(currentNode.nodes.size() - 1);
             } else if (currentNode.parentNode != null) {
                 currentNode = currentNode.parentNode;
