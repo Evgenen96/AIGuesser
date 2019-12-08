@@ -11,13 +11,15 @@ import java.util.Random;
 public class TNode {
 
     public TNode parentNode;
-    public static int counter = 0;
     public ArrayList<TNode> nodes;
     public String question;
     public boolean asked = false;
+    public int treeDepth = 0;
+
     public static FileWriter writer;
     public static FileReader reader;
     public static Random random = new Random();
+    public static int counter = 0;
 
     public TNode() {
         parentNode = null;
@@ -30,18 +32,19 @@ public class TNode {
         nodes = new ArrayList();
     }
 
-    public TNode(TNode parent, String q) {
+    public TNode(TNode parent, String q, int depth) {
         parentNode = parent;
         nodes = new ArrayList();
         question = q;
+        treeDepth = depth;
     }
 
     public void addNode() {
         nodes.add(new TNode(this));
     }
 
-    public void addNode(String q) {
-        nodes.add(new TNode(this, q));
+    public void addNode(String q, int depth) {
+        nodes.add(new TNode(this, q, depth));
     }
 
     public void save(TNode top) throws IOException {
@@ -64,14 +67,13 @@ public class TNode {
         TNode topNode = currentNode;
         while ((line = bReader.readLine()) != null) {
             if (!line.equals("")) {
-                currentNode.addNode(line);
+                currentNode.addNode(line, ++level);
                 for (int i = 0; i < level; i++) {
                     System.out.print("  ");
-                  
+
                 }
-                  System.out.print(level + "" + line);
-                  System.out.println("");
-                  level++;
+                System.out.print(level + "" + line);
+                System.out.println("");
                 currentNode = currentNode.nodes.get(currentNode.nodes.size() - 1);
             } else if (currentNode.parentNode != null) {
                 currentNode = currentNode.parentNode;
@@ -90,15 +92,28 @@ public class TNode {
     }
 
     public boolean nodesQuestionAllAsked() {
-        if (parentNode == null) {
-            return false;
-        }
+//        if (parentNode == null) {
+//            return false;
+//        }
         for (TNode node : nodes) {
             if (!node.asked) {
                 return false;
             }
         }
         return true;
+    }
+
+    public boolean autoGO() {
+        TNode temp = pickQuestion();
+       // System.out.println(temp.question);
+        temp.asked = true;
+        if ((nodesQuestionAllAsked()) && treeDepth < 3) {
+            temp.asked = false;
+            return true;
+        } else {
+            temp.asked = false;
+            return false;
+        }
     }
 
     //случайный выбор вопроса
@@ -114,7 +129,7 @@ public class TNode {
             }
 
         }
-       
+
         return nodes.get(rndQuestion);
     }
 
