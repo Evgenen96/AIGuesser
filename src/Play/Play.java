@@ -35,8 +35,8 @@ public class Play {
                     animal = sc.nextLine();
                     System.out.println("Напишите что отличает его от " + currentNode.question);
                     String animalDescription = sc.nextLine();
-                    currentNode.parentNode.addNode(animalDescription);
-                    currentNode.parentNode.nodes.get(currentNode.parentNode.nodes.size() - 1).addNode(animal);
+                    currentNode.parentNode.addNode(animalDescription, currentNode.parentNode.treeDepth + 1);
+                    currentNode.parentNode.nodes.get(currentNode.parentNode.nodes.size() - 1).addNode(animal, currentNode.parentNode.nodes.get(currentNode.parentNode.nodes.size() - 1).treeDepth + 1);
                     TNode.writer = new FileWriter("tree2.txt", false);
                     top.save(top);
                     TNode.writer.close();
@@ -50,17 +50,22 @@ public class Play {
                 animal = sc.nextLine();
                 System.out.println("Как вы бы описали его");
                 String animalDescription = sc.nextLine();
-                currentNode.addNode(animalDescription);
-                currentNode.nodes.get(currentNode.nodes.size() - 1).addNode(animal);
+                currentNode.addNode(animalDescription, currentNode.treeDepth + 1);
+                currentNode.nodes.get(currentNode.nodes.size() - 1).addNode(animal, currentNode.nodes.get(currentNode.nodes.size() - 1).treeDepth + 1);
                 TNode.writer = new FileWriter("tree2.txt", false);
                 top.save(top);
                 TNode.writer.close();
                 break;
             }
+           
             System.out.println(currentNode.question);
             answer = sc.nextInt();
             currentNode.asked = true;
             currentNode = currentNode.getAnswer(answer == 1);
+            if (currentNode.parentNode.autoGO() && answer == 2) {
+                currentNode = currentNode.pickQuestion();
+             }
+
         }
     }
 }
